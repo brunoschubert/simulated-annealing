@@ -12,4 +12,13 @@ Repeat steps 3-5 above until an acceptable solution is found or you reach some m
 *Define a cost function
 **Start with a simple Neighbor selection
 ***Define Temperature function
+------------------------------------------------------------------------------------------------------------
+The pseudocode should be as the following:
 
+Let  S = S0 
+For  K = 0 through Kmax:
+T := temperature(K∕Kmax) 
+Pick a random neighbor, Snew := neighbor(S) 
+If  P(E(S),E(Snew),T) ≥ random(0,1) :
+S := Snew 
+Output: the final state  S
