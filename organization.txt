@@ -1,0 +1,15 @@
+The basic simulated annealing algorithm should follow these steps:
+
+Generate a random solution
+Calculate its cost*
+Generate a random neighboring solution**
+Calculate the new solution's cost
+Compare them: ***
+  If cnew < cold: move to the new solution
+  If cnew > cold: maybe move to the new solution
+Repeat steps 3-5 above until an acceptable solution is found or you reach some maximum number of iterations.
+
+*Define a cost function
+**Start with a simple Neighbor selection
+***Define Temperature function
+
