@@ -1,60 +1,62 @@
+from random import random
 import numpy as np
 
-# Basic annealing function
-# should separate parts in different helper functions
-# as the basic values are defined
+# TODO: Integrate Graph Coloring problem into algorithm {Define temperatures, steps, etc}
+# TODO: Define final Cost function
+# TODO: Modularize code
+# TODO: Probabilistically decrease Temperature
+# TODO: Check While loops
 
 
-def anneal(solution,
-           cost,
-           random_neighbor,
-           accept,
-           T,
-           T_min,
-           alpha
-           ):
-  # INITIALIZE VARIABLES
-  # Decides Starting cost based on Cost Function
-    old_cost = cost(solution)
-  # Defines Starting Temperature
-    T = T
-  # Defines lower Temperature threshold
-    T_min = T_min
-  # Lowers the overall temperature
-    alpha = alpha
-    # Starts the annealing process
+def anneal(starter):
+    sol = neighbor_solution(starter)
+    old_cost = calculate_cost(sol)
+    T = 1.0
+    T_min = 0.00001
+    alpha = 0.9
+    steps = 5
     while T > T_min:
         i = 1
-        while i <= 100:
-          # Select a neighbor based on the cost
-            new_solution = random_neighbor(solution)
-            new_cost = cost(new_solution)
-            # Decides if should accept or change based on Temperature and costs
-            ap = accept(old_cost, new_cost, T)
-            if ap > np.random():
-                solution = new_solution
+        while i <= steps:
+            new_sol = neighbor_solution(sol)
+            new_cost = calculate_cost(new_sol)
+            ap = acceptance(old_cost, new_cost, T)
+            if ap > random():
+                sol = new_sol
                 old_cost = new_cost
             i += 1
+            print("Solution: " + str(sol) + " / " + " Cost: " + str(old_cost))
         T = T*alpha
-    return solution, cost
+    return sol, old_cost
 
-# -----------------PARAMENTER FUNCTIONS------------------
-
-
-def cost():
-  # Applies the cost function
-
-    # TODO
+# Generate Acceptance Probability based on the function:
+#  Acceptance = e*((cost_new - cost_old) / Temperature)
 
 
-def random_neighbor():
-      # Generate a random neighbor/solutionution
+def acceptance(cost_old, cost_new, Temp):
+    if cost_new < cost_old:
+        return 1
+    else:
+        p = np.exp(- (cost_new - cost_old) / Temp)
+        # print(str(p))
+        return p
 
-        # TODO
+# Defines cost based on current solution
 
 
-def accept():
-  # Decides if the algorithm should or not accept
-  # the given solutionution based on a
+def calculate_cost(sol):
+    a = sol ** 2
+    # print(str(a))
+    return a
 
-    # TODO
+# Generate Random Neighbor Solution
+
+
+def neighbor_solution(sol):
+    sol = sol * random()
+    # print(sol)
+    return sol
+
+
+a, b = anneal(10)
+print("FINAL-> " + "Solution: " + str(a) + " / " + " Cost: " + str(b))
