@@ -61,6 +61,12 @@ def checkCost(adjMatrix, solution, numVertices):
 # Se na matriz marcar 1, olha na posição da solução pra ver se tem conflito
 
 
+def generateSolution(solution, numVertices, numColors):
+    for i in range(numVertices):
+        solution[i] = randint(0, numColors)
+    return solution
+
+
 # TESTS
 a, b = anneal(100)
 print("FINAL-> " + "Solution: " + str(a) + " / " + " Cost: " + str(b))
