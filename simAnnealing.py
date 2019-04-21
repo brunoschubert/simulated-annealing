@@ -3,27 +3,29 @@ from random import randint
 import numpy as np
 from readFiles import readFile
 
-# TODO: Check While loops
 # TODO: Lower Colors Use
 # TODO: Optimize Anneal
-# TODO: Check why annel is getting stuck at indexes
-# TODO: Change at both indexes?
 
+# ABSOLUTE PATH TO INSTANCES
 # fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/test.col.txt"
-fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/games120.col.txt"
+# fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/games120.col.txt" #9
+# fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/myciel6.col.txt" #7
+fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/anna.col.txt"  # 11
+
+# ANNEALING ALGORITHM
 
 
 def anneal(file):
     adjMatrix, numVertices = readFile(file)
-    numColors = 20
+    numColors = 15
     numColors -= 1
     T = 1.0
     T_min = 0.001
     alpha = 0.9
-    steps = 10
+    steps = 100
     solution = generateSolution(numVertices, numColors)
     cost, startNeighbour = checkCost(adjMatrix, solution)
-    while T > T_min:
+    while T > T_min and cost != 0:
         i = 1
         while i <= steps:
             newSolution = genNeighbour(
@@ -35,9 +37,10 @@ def anneal(file):
                 solution = newSolution
                 cost = newCost
             i += 1
-            print("Solution: " + str(solution) + " / " + " Cost: " + str(cost))
+            print("Solution: " + str(solution) + " / " + " Cost: " +
+                  str(cost) + " / " + " Color: " + str(numColors) + " / " + " Temp: " + str(T))
         T = T*alpha
-    return solution, cost
+    return solution, cost, numColors
 
 # Generate Acceptance Probability based on the function:
 #  Acceptance = e*((newCost - oldCost) / Temperature)
@@ -49,6 +52,8 @@ def acceptance(oldCost, newCost, temperature):
     else:
         p = np.exp((newCost - oldCost) / temperature)
         return p
+
+# Calculates cost of the the solution based on the number of collisions
 
 
 def checkCost(adjMatrix, solution):
@@ -70,7 +75,7 @@ def checkCost(adjMatrix, solution):
                             neighbourIndex = i - prob
     return cost, neighbourIndex
 
-# Se na matriz marcar 1, olha na posição da solução pra ver se tem conflito
+# Fill the solution array with random colors
 
 
 def generateSolution(numVertices, numColors):
@@ -78,6 +83,8 @@ def generateSolution(numVertices, numColors):
     for i in range(numVertices):
         solution[i] = randint(0, numColors)
     return solution
+
+# Generate a new neighbour solution
 
 
 def genNeighbour(solution, numColors, numVertices, startNeighbour):
@@ -89,11 +96,7 @@ def genNeighbour(solution, numColors, numVertices, startNeighbour):
     return solution
 
 
-def check(numVertices):
-    for vert in range(numVertices):
-        print(vert)
-
-
 # TESTS
-a, b = anneal(fileToRead)
-print("FINAL-> " + "Solution: " + str(a) + " / " + " Cost: " + str(b))
+a, b, c = anneal(fileToRead)
+print("FINAL-> " + "Solution: " + str(a) + " / " +
+      " Cost: " + str(b) + " / " + " Colors: " + str(c))
