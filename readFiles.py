@@ -39,11 +39,3 @@ def createMatrix(numVertices, edgeList):
         matrix[i][j] = 1
         matrix[j][i] = 1
     return matrix
-
-
-# file = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/games120.col.txt"
-
-# file = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/test.col.txt"
-# adjMatrix, vert = readFile(file)
-# print(adjMatrix)
-# print(vert)
