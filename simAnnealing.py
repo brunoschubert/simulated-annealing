@@ -1,4 +1,5 @@
 from random import random
+from random import randint
 import numpy as np
 
 # TODO: Integrate Graph Coloring problem into algorithm {Define temperatures, steps, etc}
@@ -7,6 +8,12 @@ import numpy as np
 # TODO: Probabilistically decrease Temperature
 # TODO: Check While loops
 
+# TODO: Colors Vector
+# TODO: Cost as amount of Collisions
+
+fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/test.col.txt"
+# fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/games120.col.txt"
+
 
 def anneal(starter):
     sol = neighbor_solution(starter)
@@ -14,7 +21,7 @@ def anneal(starter):
     T = 1.0
     T_min = 0.00001
     alpha = 0.9
-    steps = 5
+    steps = 1000
     while T > T_min:
         i = 1
         while i <= steps:
@@ -41,22 +48,19 @@ def acceptance(cost_old, cost_new, Temp):
         # print(str(p))
         return p
 
-# Defines cost based on current solution
+
+def checkCost(adjMatrix, solution, numVertices):
+    for vert in range(numVertices):
+        cost = 0
+        for i in range(len(adjMatrix)):
+            for j in range(len(adjMatrix[i])):
+                if(adjMatrix[i][j] == 1 and solution[vert] == solution[i]):
+                    cost += 1
+    return cost
+
+# Se na matriz marcar 1, olha na posição da solução pra ver se tem conflito
 
 
-def calculate_cost(sol):
-    a = sol ** 2
-    # print(str(a))
-    return a
-
-# Generate Random Neighbor Solution
-
-
-def neighbor_solution(sol):
-    sol = sol * random()
-    # print(sol)
-    return sol
-
-
-a, b = anneal(10)
+# TESTS
+a, b = anneal(100)
 print("FINAL-> " + "Solution: " + str(a) + " / " + " Cost: " + str(b))
