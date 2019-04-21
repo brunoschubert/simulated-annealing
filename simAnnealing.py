@@ -9,26 +9,27 @@ from readFiles import readFile
 # TODO: Check why annel is getting stuck at indexes
 # TODO: Change at both indexes?
 
-#fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/test.col.txt"
+# fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/test.col.txt"
 fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/games120.col.txt"
 
 
 def anneal(file):
     adjMatrix, numVertices = readFile(file)
-    numColors = 15
+    numColors = 20
+    numColors -= 1
     T = 1.0
     T_min = 0.001
     alpha = 0.9
-    steps = 500
+    steps = 10
     solution = generateSolution(numVertices, numColors)
-    cost, startNeighbour = checkCost(adjMatrix, solution, numVertices)
+    cost, startNeighbour = checkCost(adjMatrix, solution)
     while T > T_min:
         i = 1
         while i <= steps:
             newSolution = genNeighbour(
                 solution, numColors, numVertices, startNeighbour)
             newCost, startNeighbour = checkCost(
-                adjMatrix, solution, numVertices)
+                adjMatrix, solution)
             ap = acceptance(cost, newCost, T)
             if ap > random():
                 solution = newSolution
@@ -50,16 +51,23 @@ def acceptance(oldCost, newCost, temperature):
         return p
 
 
-def checkCost(adjMatrix, solution, numVertices):
+def checkCost(adjMatrix, solution):
     cost = 0
     neighbourIndex = -1
-    for vert in range(numVertices):
-        for i in range(len(adjMatrix)):
-            for j in range(len(adjMatrix[i])):
-                if(adjMatrix[i][j] == 1 and solution[vert] == solution[i]):
-                    cost += 1
-                    if(neighbourIndex == -1):
-                        neighbourIndex = vert
+    for i in range(len(adjMatrix)):
+        for j in range(len(adjMatrix[i])):
+            if(i != j and adjMatrix[i][j] == 1 and solution[i] == solution[j]):
+                cost += 1
+                if(neighbourIndex == -1):
+                    prob = randint(1, 2)
+                    if(prob % 2 == 0):
+                        neighbourIndex = i
+                    elif(1 < i < (len(adjMatrix)-1)):
+                        ap = randint(1, 10)
+                        if(ap % 2 == 0):
+                            neighbourIndex = i + prob
+                        else:
+                            neighbourIndex = i - prob
     return cost, neighbourIndex
 
 # Se na matriz marcar 1, olha na posição da solução pra ver se tem conflito
@@ -79,6 +87,11 @@ def genNeighbour(solution, numColors, numVertices, startNeighbour):
         newColor = randint(0, numColors)
     solution[startNeighbour] = newColor
     return solution
+
+
+def check(numVertices):
+    for vert in range(numVertices):
+        print(vert)
 
 
 # TESTS
