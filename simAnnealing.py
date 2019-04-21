@@ -67,6 +67,15 @@ def generateSolution(solution, numVertices, numColors):
     return solution
 
 
+def genNeighbour(solution, startNeighbour, numColors):
+    oldSol = solution[startNeighbour]
+    newSol = randint(0, numColors)
+    while (newSol == oldSol):
+        newSol = randint(0, numColors)
+    solution[startNeighbour] = newSol
+    return solution
+
+
 # TESTS
 a, b = anneal(100)
 print("FINAL-> " + "Solution: " + str(a) + " / " + " Cost: " + str(b))
