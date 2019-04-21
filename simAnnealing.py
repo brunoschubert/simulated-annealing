@@ -16,10 +16,10 @@ fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/anna.col.txt"
 
 def anneal(file):
     adjMatrix, numVertices = readFile(file)
-    numColors = 12
+    numColors = 15
     numColors -= 1
     T = 1.0
-    T_min = 0.00001
+    T_min = 0.0001
     alpha = 0.9
     steps = 100
     solution = generateSolution(numVertices, numColors)
@@ -66,7 +66,7 @@ def checkCost(adjMatrix, solution):
                 collisionList.append(i)
     if(neighbourIndex == -1):
         prob = randint(1, 2)
-        if(prob % 2 == 0):
+        if(prob % 2 == 0 and len(collisionList) != 0):
             neighbourIndex = choice(collisionList)
         elif(1 < i < (len(adjMatrix)-1)):
             ap = randint(1, 3)
