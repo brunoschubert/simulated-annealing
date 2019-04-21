@@ -1,6 +1,5 @@
-from random import random
-from random import randint
 import numpy as np
+from random import random, randint, choice
 from readFiles import readFile
 
 # TODO: Lower Colors Use
@@ -17,10 +16,10 @@ fileToRead = "D:/Unisinos/Inteligência Artificial/instâncias/GCP/anna.col.txt"
 
 def anneal(file):
     adjMatrix, numVertices = readFile(file)
-    numColors = 15
+    numColors = 12
     numColors -= 1
     T = 1.0
-    T_min = 0.001
+    T_min = 0.00001
     alpha = 0.9
     steps = 100
     solution = generateSolution(numVertices, numColors)
@@ -50,29 +49,35 @@ def acceptance(oldCost, newCost, temperature):
     if newCost < oldCost:
         return 1
     else:
-        p = np.exp((newCost - oldCost) / temperature)
-        return p
+        ap = np.exp(- (newCost - oldCost) / temperature)
+        return ap
 
 # Calculates cost of the the solution based on the number of collisions
 
 
 def checkCost(adjMatrix, solution):
     cost = 0
+    collisionList = []
     neighbourIndex = -1
     for i in range(len(adjMatrix)):
         for j in range(len(adjMatrix[i])):
             if(i != j and adjMatrix[i][j] == 1 and solution[i] == solution[j]):
                 cost += 1
-                if(neighbourIndex == -1):
-                    prob = randint(1, 2)
-                    if(prob % 2 == 0):
-                        neighbourIndex = i
-                    elif(1 < i < (len(adjMatrix)-1)):
-                        ap = randint(1, 10)
-                        if(ap % 2 == 0):
-                            neighbourIndex = i + prob
-                        else:
-                            neighbourIndex = i - prob
+                collisionList.append(i)
+    if(neighbourIndex == -1):
+        prob = randint(1, 2)
+        if(prob % 2 == 0):
+            neighbourIndex = choice(collisionList)
+        elif(1 < i < (len(adjMatrix)-1)):
+            ap = randint(1, 3)
+            if(ap % 3 == 0):
+                neighbourIndex = choice(collisionList)
+                neighbourIndex = neighbourIndex + prob
+            elif(ap % 3 == 2):
+                neighbourIndex = choice(collisionList)
+                neighbourIndex = neighbourIndex - prob
+            else:
+                neighbourIndex = choice(len(solution))
     return cost, neighbourIndex
 
 # Fill the solution array with random colors
